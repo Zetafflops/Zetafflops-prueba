@@ -1,0 +1,73 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z_PANTALLAS_P1004306_LOGIC
+*&---------------------------------------------------------------------*
+                  " CREAT_INTER
+*&---------------------------------------------------------------------*
+*&      Form  LOGI_INTER
+*&---------------------------------------------------------------------*
+*       Esta subrutina se encarga se implementar la logica de la interfaz.
+*----------------------------------------------------------------------*
+FORM logi_inter USING VALUE(gwa_z) TYPE zeval_p1004306.
+
+*     Instruccion que se utiliza para optener la informacion de la tabla zeval_p1004306 cuando el nro_de_personal sea igual a p_nr_per
+  SELECT SINGLE * FROM zeval_p1004306 INTO gwa_z WHERE nro_de_personal EQ p_nr_per.
+
+  CASE abap_true. "Case para identificar la opcion del CRUD que el usuario escogio
+
+    WHEN p_create. "Opcion para agregar la informacion basica del personal en la tabla zeval_p1004306
+
+      gwa_z-primer_nombre = p_p_nom. "Se agrega el primer nombre a la variable gwa_z-primer_nombre para agrear la informacion a la tabla zeval_p1004306
+      gwa_z-segundo_nombre = p_s_nom. "Se agrega el segundo nombre a la variable gwa_z-segundo_nombre para agrear la informacion a la tabla zeval_p1004306
+      gwa_z-primer_apellido = p_p_apel. "Se agrega el primer apellido a la variable gwa_z-primer_apellido para agrear la informacion a la tabla zeval_p1004306
+      gwa_z-fecha_de_nac = p_f_naci. "Se agrega la fecha de nacimiento a la variable gwa_z-fecha_de_nac para agrear la informacion a la tabla zeval_p1004306
+      gwa_z-nacionalidad = p_l_naci. "Se agrega la nacionalidad a la variable gwa_z-nacionalidad para agrear la informacion a la tabla zeval_p1004306
+      gwa_z-nro_de_personal = p_nr_per. "Se agrega el numero del personal a la variable gwa_z-nro_de_personal para agrear la informacion a la tabla zeval_p1004306
+
+      INSERT zeval_p1004306 FROM gwa_z. "Se agrea la informacion que se encuentra almacenada en la variable gwa_z a la tabla zeval_p1004306
+
+      MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '006'. "Mensaje de notificacion alertando que los datos se han guardado de manera exitosa
+
+    WHEN p_read. "Opcion para leer y visualizar la informacion
+
+      IF sy-subrc EQ 0. "Condicional que valida si se encontro la informacion
+        WRITE: / 'Numero de personal: ',gwa_z-nro_de_personal. "Imprime el numero de personal
+        WRITE: / 'Primer nombre: ',gwa_z-primer_nombre. "Imprime el primer nombre
+        WRITE: / 'Segundo nombre: ',gwa_z-segundo_nombre. "Imprime el segundo nombre
+        WRITE: / 'Primer apellido: ',gwa_z-primer_apellido. "Imprime el primer apellido
+        WRITE: / 'Fecha de nacimiento: ',gwa_z-fecha_de_nac. "Imprime la fecha de nacimiento
+        WRITE: / 'Nacionalidad: ',gwa_z-nacionalidad. "Imprime la nacionalidad
+      ELSE.
+        MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '007'. "Mensaje de informacion que notifica que no se encuentra el numero personal ingresado
+      ENDIF.
+
+    WHEN p_update. "Opcion para actualizar la informacion
+
+      IF sy-subrc EQ 0. "Condicional que se utiliza para validar si se encontro la informacion del personal
+
+        gwa_z-primer_nombre = p_p_nom. "Se agrega el primer nombre a la variable gwa_z-primer_nombre para modificar la informacion en la tabla zeval_p1004306
+        gwa_z-segundo_nombre = p_s_nom. "Se agrega el segundo nombre a la variable gwa_z-segundo_nombre para modificar la informacion en la tabla zeval_p1004306
+        gwa_z-primer_apellido = p_p_apel. "Se agrega el primer apellido a la variable gwa_z-primer_apellido para modificar la informacion en la tabla zeval_p1004306
+        gwa_z-fecha_de_nac = p_f_naci. "Se agrega la fecha de nacimiento a la variable gwa_z-fecha_de_nac para modificar la informacion en la tabla zeval_p1004306
+        gwa_z-nacionalidad = p_l_naci. "Se agrega la nacionalidad a la variable gwa_z-nacionalidad para modificar la informacion en la tabla zeval_p1004306
+        gwa_z-nro_de_personal = p_nr_per. "Se agrega el numero del personal a la variable gwa_z-nro_de_personal para modificar la informacion en la tabla zeval_p1004306
+
+        UPDATE zeval_p1004306 FROM gwa_z.
+        IF sy-subrc EQ 0.
+          MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '008'. "Mensaje de informacion que notifica que los datos se han modificado de manera correcta
+        ENDIF.
+      ELSE.
+        MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '007'. "Mensaje de informacion que notifica que no se encuentra el numero del personal
+      ENDIF.
+
+    WHEN p_delete. "Opcion para eliminar la informacion
+
+      DELETE zeval_p1004306 FROM gwa_z. "Instruccion que permite eliminar la informacion de la tabla zeval_p1004306 cuando nro_de_personal = p_nr_per
+
+      IF sy-subrc EQ 0. "Condicional que se utiliza para validar si se elimino los datos
+        MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '009'. "Mensaje de informacion que notifica que los datos se han eliminado
+      ELSE.
+        MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '007'."Mensaje de informacion que notifica que no se encuentra el numero del personal
+      ENDIF.
+    WHEN OTHERS.
+  ENDCASE.
+ENDFORM.
