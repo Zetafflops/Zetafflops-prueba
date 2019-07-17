@@ -1,0 +1,28 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z_PANTALLAS_P1004306_INTERFACE
+*&---------------------------------------------------------------------*
+
+SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+
+SELECTION-SCREEN BEGIN OF BLOCK crud WITH FRAME TITLE text-b01. "Se abre el bloque CRUD el cual contiene las opciones de crear, actualizar, leer y eliminar.
+
+PARAMETER: p_create RADIOBUTTON GROUP crud DEFAULT 'X', "Create - Crear personal
+           p_read RADIOBUTTON GROUP crud, "Read - Visualizar personal
+           p_update RADIOBUTTON GROUP crud,"Update - Actualizar personal
+           p_delete RADIOBUTTON GROUP crud. "Delete - Eliminar personal
+
+SELECTION-SCREEN END OF BLOCK crud. "Se finaliza el bloque CRUD
+
+SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+
+SELECTION-SCREEN BEGIN OF BLOCK personal_infor WITH FRAME TITLE text-b02. "Se abre el bloque Personal_infor el cual contiene los campos para ingresar
+"los datos personales.
+
+PARAMETERS: p_p_nom TYPE c LENGTH 25 OBLIGATORY, "Primer nombre
+            p_s_nom TYPE c LENGTH 25 OBLIGATORY, "Segundo nombre
+            p_p_apel TYPE c LENGTH 25 OBLIGATORY, "Primer apellido
+            p_f_naci TYPE sydatum OBLIGATORY, "Fecha de nacimiento
+            p_l_naci TYPE c LENGTH 10 OBLIGATORY, "Lugar de nacimiento
+            p_nr_per TYPE n LENGTH 10 OBLIGATORY. "Numero del personal
+
+SELECTION-SCREEN END OF BLOCK personal_infor. "Se finaliza el bloque Personal_infor
