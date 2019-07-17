@@ -1,0 +1,45 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_EVAL_5_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT z_act_eval_5_p1004306.
+
+CLASS c_consulta DEFINITION. "Se define la clase c_consulta
+  PUBLIC SECTION. "Se declara la seccion publica
+    METHODS: m_busqueda IMPORTING compania TYPE string. "De declara el metodo m_busqueda el cual tiene como parametro la compañia
+ENDCLASS. "Se finaliza la definicion de la clase c_consulta
+
+CLASS c_consulta IMPLEMENTATION. "Se implementa la clase c_consulta
+  METHOD m_busqueda. "Se implementa el metodo m_busquedas
+    DATA: gt_sflight TYPE TABLE OF sflight, "Se declara la tabla interna gt_sflight de tipo sflight
+          gwa_sflight TYPE sflight. "Se declara la variable gwa_sflight la cual servira para recorrer la tabla interna
+*Se activa la sentencia select que sirve para realizar la busqueda en la tabla sflight cuando la compañia sea igual a currency
+        SELECT * FROM sflight INTO TABLE gt_sflight WHERE carrid = compania.
+    IF sy-subrc eq 0."Se valida si hay datos
+*Se imprime una cabecera que sirve para identificar los datos que se van a imprimir
+        WRITE: / 'CARRID  CONNID   FLDATE                   PRICE   CURRENCY    PLANETYPE        SEATSMAX    SEATSOCC               PAYMENTSUM        SEATMAX_B       SEATSOCC_B    SEATSOCC_F    NUM_PUERTA'.
+        LOOP AT gt_sflight INTO gwa_sflight. "Se recorre la tabla interna gt_sflight
+*Se imprime los datos resultantes de la busqueda en la tabla sflight que se almancenan en la tabla interna gt_sflight
+          WRITE: / gwa_sflight-carrid,'   ',gwa_sflight-connid,' ',gwa_sflight-fldate,'  ',gwa_sflight-price,'  ',gwa_sflight-currency,'  ',gwa_sflight-planetype,' ',gwa_sflight-seatsmax,'  ',gwa_sflight-seatsocc,'  ',
+    gwa_sflight-paymentsum,'  ',gwa_sflight-seatsmax_b,'  ',gwa_sflight-seatsocc_b,'  ',gwa_sflight-seatsocc_f,'        ',gwa_sflight-num_puerta.
+        ENDLOOP.
+    else.
+      MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '010'.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+
+START-OF-SELECTION. "Cuando se declara e implementa la clase c_consulta se ejecuta el siguiente codigo
+  SELECTION-SCREEN SKIP."Pinta y genera un salto de linea
+  SELECTION-SCREEN BEGIN OF BLOCK busqueda WITH FRAME TITLE text-b01. "Se abre el bloque busqueda el cual contiene los campos para realizar la busqueda de los datos
+  PARAMETERS p_comp TYPE string OBLIGATORY. "Compañia
+  SELECTION-SCREEN END OF BLOCK busqueda. "Fin del bloque busqueda
+  DATA: gr_object TYPE REF TO object, "Se declara la varibale gr_object de tipo object para contener la clase c_consulta
+        gv_method_name TYPE string. "Se declara la varibale gv_method_name la cual va a contener el nombre del metodo que vamos a llamar
+  CREATE OBJECT gr_object TYPE c_consulta. "Se crea el objeto de tipo c_consulta el cual tiene la clase c_consulta
+  gv_method_name = 'M_BUSQUEDA'. "Se le pasa el nombre del metodo a la variable gv_method_name
+  CALL METHOD gr_object->(gv_method_name) EXPORTING compania = p_comp."Se llama al metodo m_busqueda y se le pasa por parametro la compañia
