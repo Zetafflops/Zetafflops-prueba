@@ -1,0 +1,71 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z_ACT_EVAL_2_P1004306_UPD_FILE
+*&---------------------------------------------------------------------*
+
+*&---------------------------------------------------------------------*
+*&      Form  SUB_AND_LOGIC_INTERFACE
+*&---------------------------------------------------------------------*
+*       Esta subrutina se encarga de subir el archivo y pocesar la logica
+*       de la interfaz.
+*----------------------------------------------------------------------*
+FORM sub_and_logic_interface .
+
+CALL FUNCTION 'ALSM_EXCEL_TO_INTERNAL_TABLE' "Se llama la funcion ALSM_EXCEL_TO_INTERNAL_TABLE la cual servira para procesar el archivo
+  EXPORTING
+    filename                = lv_ruta_fichero "Se transfiere la ruta del archivo al parametro filename
+    i_begin_col             = 1 "Columna inicial
+    i_begin_row             = 1 "Fila inicial
+    i_end_col               = 100 "Columna final
+    i_end_row               = 30000 "Fila final
+  TABLES
+    intern                  = li_excel "Tabla interna donde se va almacenar los datos que estan en el archivo
+  EXCEPTIONS
+    inconsistent_parameters = 1 "Excepcion
+    upload_ole              = 2 "Excepcion
+    OTHERS                  = 3. "Excepcion
+
+IF sy-subrc EQ 0. "Se Comprueba si se pudo procesar en archivo
+
+  DATA: nro_de_personal TYPE n LENGTH 10, "Variable que va a contener numero de personal
+        primer_nombre TYPE string, "Variable que va a contener primer nombre
+        segundo_nombre TYPE string, "Variable que va a contener segundo nombre
+        primer_apellido TYPE string, "Variable que va a contener primer apellido
+        fecha_de_nac TYPE string, "Variable que va a contener fecha de nacimiento
+        nacionalidad TYPE string. "Variable que va a contener nacionalidad
+
+  LOOP AT li_excel WHERE row <> 00001. "Ignoramos la primera fila de cabecera
+    CASE li_excel-col. "Se comprueba el indice de la columna en la que se encuentra
+      WHEN 1. "Opcion para la columna 1
+        nro_de_personal = li_excel-value. "Se guarda el dato de la tabla interna li_excel en la variable nro_de_personal
+      WHEN 2."Opcion para la columna 2
+        primer_nombre = li_excel-value. "Se guarda el dato de la tabla interna li_excel en la variable primer_nombre
+      WHEN 3."Opcion para la columna 3
+        segundo_nombre = li_excel-value. "Se guarda el dato de la tabla interna li_excel en la variable segundo_nombre
+      WHEN 4."Opcion para la columna 4
+        primer_apellido = li_excel-value. "Se guarda el dato de la tabla interna li_excel en la variable primer_apellido
+      WHEN 5."Opcion para la columna 5
+        fecha_de_nac = li_excel-value. "Se guarda el dato de la tabla interna li_excel en la variable fecha_de_nac
+      WHEN 6."Opcion para la columna 6
+
+        nacionalidad = li_excel-value. "Se guarda el dato de la tabla interna li_excel en la variable nacionalidad
+
+        DATA gwa_z TYPE zeval_p1004306. "Se declara la variable gwa_z que va a contener la estructura de la tabla zeval_p1004306
+
+        gwa_z-nro_de_personal = nro_de_personal. "Se guarda el numero de personal en la variable gwa_z-nro_de_personal
+        gwa_z-primer_nombre = primer_nombre. "Se guarda el primer nombre en la variable gwa_z-primer_nombre
+        gwa_z-segundo_nombre = segundo_nombre. "Se guarda el segundo nombre en la variable gwa_z-segundo_nombre
+        gwa_z-primer_apellido = primer_apellido. "Se guarda el primer apellido en la variable gwa_z-primer_apellido
+        gwa_z-fecha_de_nac = nro_de_personal. "Se guarda la fecha de nacimiento en la variable gwa_z-fecha_de_nac
+        gwa_z-nacionalidad = nacionalidad. "Se guarda la nacionalidad en la variable gwa_z-nacionalidad
+
+        MODIFY zeval_p1004306 FROM gwa_z. "Se llama la opcion modify para guardar o crear los datos de la tabla interna alsmex_tabline en la
+                                           "tabla de base de datos zeval_p1004306
+        MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '013'."Mensaje de informacion que notifica que los datos se han procesado de manera exitosa
+
+    ENDCASE.
+  ENDLOOP.
+ELSE.
+  MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '012'. "Mensaje de informacion que notifica que no se encuentra el archivo buscado
+ENDIF.
+
+ENDFORM.                    " SUB_AND_LOGIC_INTERFACE
