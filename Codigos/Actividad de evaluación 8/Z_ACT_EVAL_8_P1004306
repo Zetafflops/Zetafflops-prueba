@@ -1,0 +1,57 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_EVAL_8_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT z_act_eval_8_p1004306.
+
+TYPE-POOLS: truxs. "Se importa la libreria que nos sirve para crear el archivo de texto plano
+DATA: gt_table TYPE STANDARD TABLE OF pa0000 WITH HEADER LINE. "Se declara la tabla interna gt_table con la estructura de la tabla PA0000
+SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+SELECTION-SCREEN BEGIN OF BLOCK expo_inf WITH FRAME TITLE text-b01. "Se abre el bloque expo_info el cual contiene las campos para guardar y filtrar la informacion
+
+PARAMETERS: p_ruta TYPE string, "Ruta donde se quiere guardar el archivo plano
+            p_fecha TYPE d. "Fecha la cual sirve para filtrar la informacion
+
+SELECTION-SCREEN END OF BLOCK expo_inf. "Se finaliza el bloque expo_inf
+*Se busca la informacion de las tablas PA0001, PA0002 y PA0000 con inner join cuando PA0000~BEGDA sea igual a p_fecha y PA0001~plans sea igual a 0
+SELECT * INTO CORRESPONDING FIELDS OF TABLE gt_table FROM pa0000
+              INNER JOIN pa0001 ON  pa0000~begda = pa0001~begda
+              INNER JOIN pa0002 ON  pa0001~begda = pa0002~begda
+              WHERE pa0000~begda = p_fecha AND pa0001~plans = 0.
+
+IF sy-subrc EQ 0. "Se valida si se encontraron los datos
+
+  DATA: gt_layout TYPE truxs_t_text_data. "Tabla interna que sirve para transferir los datos de la tabla interna gt_table al archivo plano
+
+  CALL FUNCTION 'SAP_CONVERT_TO_TEX_FORMAT' "Modulo de funcion que sirve para crear el archivo de texto plano
+    EXPORTING
+      i_field_seperator    = ';' "Se indica como van a estar separado los datos
+    TABLES
+      i_tab_sap_data       = gt_table "Tabla donde se encuentra los datos que agregamos al archivo plano
+    CHANGING
+      i_tab_converted_data = gt_layout "Tabla que contiene va a contener los datos del archivo plano
+    EXCEPTIONS
+      conversion_failed    = 1 "Posible exception que puede arrojar la funcion
+      OTHERS               = 2. "Otras posibles exceptions
+
+  CALL FUNCTION 'GUI_DOWNLOAD' "Modulo de funcion que sirve para descargar el archivo plano que creamos
+    EXPORTING
+      filename                = p_ruta "Ruta donde se va a descargar el archivo plano
+    TABLES
+      data_tab                = gt_layout "Tabla donde se encuentra los datos que agregamos al archivo plano
+    EXCEPTIONS
+      file_write_error        = 1 "Posible exception que puede arrojar la funcion
+      no_batch                = 2 "Posible exception que puede arrojar la funcion
+      gui_refuse_filetransfer = 3 "Posible exception que puede arrojar la funcion
+      invalid_type            = 4 "Posible exception que puede arrojar la funcion
+      no_authority            = 5 "Posible exception que puede arrojar la funcion
+      unknown_error           = 6. "Posible exception que puede arrojar la funcion
+
+  MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '016'.
+ELSE.
+  MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '015'.
+ENDIF.
