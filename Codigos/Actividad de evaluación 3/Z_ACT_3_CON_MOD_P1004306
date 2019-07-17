@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_3_CON_MOD_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT Z_ACT_3_CON_MOD_P1004306.
+
+SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+
+SELECTION-SCREEN BEGIN OF BLOCK Datos_buscar WITH FRAME TITLE text-b01."Se abre el bloque Datos_buscar el cual contiene los datos que se van a utilizar
+                                                                        "para buscar la informacion del personal
+
+PARAMETERS: p_nacio TYPE string OBLIGATORY, "Nacionalidad
+            p_nr_per TYPE i OBLIGATORY. "Numero de personal
+
+SELECTION-SCREEN END OF BLOCK datos_buscar. "Se finaliza el bloque Datos_buscar
+
+INITIALIZATION. "Se indica que primero se debe validar la informacion antes de realizar operaciones
+
+AT SELECTION-SCREEN ON p_nacio.
+
+  IF p_nacio CA '0123456789°|¬!"#$%&/()=?¡''¨¨*~´´+*~{}^^``[]-.,;:_<>@'. "Se valida que en el campo p_nr_per solo se ingresen letras
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '000'. "Mensaje de error notificando que solo se puede ingresar letras
+  ELSE.
+  ENDIF.
+
+START-OF-SELECTION. "Cuando las validaciones son correctas se ejecuta el siguiente codigo
+
+  CALL FUNCTION 'Z_ACTIVIDAD_3_P1004306' "Se llama el modulo de funcion Z_ACTIVIDAD_3_P1004306
+   EXPORTING
+     NR_DE_PERSONAL       = p_nr_per "Se pasa por parametro la variable p_nr_per
+     NACIONALIDAD         = p_nacio "Se pasa por parametro la variable p_nacio
+   EXCEPTIONS
+     EX_SIN_DATOS         = 1. "Si se activa una excepcion devulve 1
+
+IF sy-subrc NE 0. "Se valida si se activo la excepcion
+  MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '010'."Mensaje de informacion que notifica que no se han encontrado los datos
+ENDIF.
