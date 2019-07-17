@@ -1,0 +1,91 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z_ACT_EVAL_7_P1004306_LOGIC
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  CREAT_ALV
+*&---------------------------------------------------------------------*
+*       Esta subrutina se encarga de crear la interfaz ALV
+*----------------------------------------------------------------------*
+
+FORM creat_alv .
+
+g_st_fieldcat-fieldname = 'MANDT'. "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Mandante de conexion'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'M de conexion'. "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat. "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'CARRID'.   "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Compañía'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'Comp.'.    "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat."Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'CONNID'.   "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Nº vuelo'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'Vuelo'.    "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat."Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'FLDATE'.          "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Fecha de vuelo'.  "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'Fecha'.           "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.       "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'PRICE'.             "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Tarifa de vuelo'.   "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'Tarifa'.            "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.         "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'PLANETYPE'.     "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Tipo de avión'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'T de avión'.    "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.     "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'SEATSMAX'.    "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Ocupación'.   "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'Ocupación'.   "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.   "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'SEATSOCC'.        "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Plazas ocupadas'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'P ocupadas'.      "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.       "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'PAYMENTSUM'.              "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Total de las reservas'.   "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'T de las reservas'.       "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.               "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'SEATMAX_B'.                 "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Ocupación maxima business'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'O maxima business'.         "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.                 "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'SEATSOCC_B'.              "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Plazas ocupada business'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'P ocupadas business'.     "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.               "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'SEATSMAX_F'.                     "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Ocupación maxima primera clase'. "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'O maxi pri clase'.               "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.                      "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'SEATSOCC_F'.                  "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Plazas ocupada primera clase'."Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'P ocupadas pri clas'.         "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.                   "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  g_st_fieldcat-fieldname = 'NUM_PUERTA'.          "Agrega la informacion que se encuentra en el atributo
+  g_st_fieldcat-seltext_m = 'Numero de puerta'.    "Nombre de la columna cuando se encuentra maximizada
+  g_st_fieldcat-seltext_s = 'N° puerta'.           "Nombre de la columna cuando se encuentra minimizada
+  APPEND g_st_fieldcat TO g_it_fieldcat.           "Se agrega los atributos mencionados a la tabla interna del ALV
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY' "Se llama al modulo de funcion que crea el ALV
+    EXPORTING
+      it_fieldcat   = g_it_fieldcat[] "Tabla que contiene las caracteristicas y atributos agregados
+    TABLES
+      t_outtab      = gt_sflight[] "Tabla interna que contiene los datos consultados
+    EXCEPTIONS
+      program_error = 1 "Posible error
+      OTHERS        = 2. "Otros posibles erroreS
+
+ENDFORM.                    " CREAT_ALV
