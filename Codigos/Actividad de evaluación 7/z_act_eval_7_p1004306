@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_EVAL_7_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT z_act_eval_7_p1004306.
+TYPES: slis. "Cargamos los datos tipo slis
+
+DATA: gt_sflight TYPE TABLE OF sflight, "Se crea la tabla interna gt_sflight que va a contener la estructura de la tabla sflight
+      g_st_sflight TYPE sflight.
+
+DATA: g_it_fieldcat TYPE slis_t_fieldcat_alv, "Se declara la variable g_it_fieldcat que contiene la estructura del reporte
+      g_st_fieldcat TYPE slis_fieldcat_alv.  "Se declara la variable g_st_fieldcat que contiene las caracteristicas del reporte
+
+SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+SELECTION-SCREEN BEGIN OF BLOCK d_a_buscar WITH FRAME TITLE text-b01. "Se abre el bloque d_a_buscar el cual contiene los campos para buscan la informacion
+PARAMETERS p_comp TYPE string. "Compañia
+SELECTION-SCREEN END OF BLOCK d_a_buscar. "Fin del bloque d_a_buscar
+
+SELECT * FROM sflight INTO TABLE gt_sflight WHERE carrid EQ p_comp. "Sentencia que trae todos los datos de la tabla sflight cuando carrid = p_comp
+
+IF sy-subrc EQ 0.
+  PERFORM creat_alv. "Esta subrutina se encarga de crear el ALV
+ELSE.
+  MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '006'. "Mensaje de informacion que notifica que no se encuentran los datos
+ENDIF.
+INCLUDE z_act_eval_7_p1004306_logic. "Este include contiene la creacion ALV
