@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_EVAL_2_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT z_act_eval_2_p1004306.
+
+SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+
+PARAMETERS p_ruta TYPE string. "Ruta donde se encuentra el archivo
+
+DATA: lv_ruta_fichero TYPE rlgrap-filename. "Variable que sirve para guardar la ruta donde se encuentra el archivo
+
+lv_ruta_fichero = p_ruta. "Se trasfiere la ruta ingresada a la variable que va a contener la ruta del archivo
+
+DATA: BEGIN OF li_excel OCCURS 0. "Se declara la variable li_excel que va a contener la estructura de la tabla alsmex_tabline
+        INCLUDE STRUCTURE alsmex_tabline.
+DATA: END OF li_excel.
+
+PERFORM sub_and_logic_interface. "Esta subrutina se encarga de procesar la logica del sistema
+
+INCLUDE z_act_eval_2_p1004306_UPD_FILE. "Este include contiene la logica del sistema
