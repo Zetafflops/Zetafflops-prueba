@@ -1,0 +1,28 @@
+FUNCTION z_actividad_3_p1004306.
+*"----------------------------------------------------------------------
+*"*"Interfase local
+*"  IMPORTING
+*"     REFERENCE(NR_DE_PERSONAL) TYPE  INT4 OPTIONAL
+*"     REFERENCE(NACIONALIDAD) TYPE  STRING OPTIONAL
+*"  EXCEPTIONS
+*"      EX_SIN_DATOS
+*"----------------------------------------------------------------------
+
+  DATA: gt_z TYPE TABLE OF zeval_p1004306, "Se declara la tabla interna gt_z que va a contener la tabla de base de datos zeval_p1004306
+        gwa_z TYPE zeval_p1004306. "Se declara la variable gwa_z de tipo zeval_p1004306 que se usa para recorrer los campos de la tabla
+
+*Se busca la informacion en la tabla zeval_p1004306 que cumpla la condicion de nro_de_personal EQ nr_de_personal AND nacionalidad EQ nacionalidad.
+  SELECT * FROM zeval_p1004306 INTO TABLE gt_z WHERE nro_de_personal EQ nr_de_personal AND nacionalidad EQ nacionalidad.
+
+  IF sy-subrc EQ 0. "Se comprueba si se encontro la informacion consultada
+
+    LOOP AT gt_z INTO gwa_z. "Inicio del recorrido de la tabla interna gt_z la cual contiene la informacion consultada
+      WRITE: / 'El numero del personal es: ',gwa_z-nro_de_personal, "Se imprime el numero del personal
+             / 'El primer nombre del personal es: ',gwa_z-primer_nombre. "Se imprime el nombre del personal
+    ENDLOOP.
+
+  ELSEIF sy-subrc NE 0. "Se comprueba si se arroja una excepcion
+    RAISE ex_sin_datos. "Se invoca la excepcion ex_sin_datos
+  ENDIF.
+
+ENDFUNCTION.
