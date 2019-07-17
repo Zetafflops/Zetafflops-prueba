@@ -1,0 +1,55 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_EVAL_1_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT z_act_eval_1_p1004306.
+
+INCLUDE z_pantallas_p1004306_def_var. "Este include contiene la definicion de las variables
+INCLUDE z_pantallas_p1004306_interface. "Este include contiene la creacion y definicion de la interfaz
+INCLUDE z_pantallas_p1004306_logic. "Este include contiene la logica del programa
+
+INITIALIZATION."Se indica que primero se debe validar la informacion antes de realizar operaciones
+
+AT SELECTION-SCREEN ON p_p_nom. "Seccion que realiza validaciones sobre el campo p_p_nom
+  IF p_p_nom CA '0123456789°|¬!"#$%&/()=?¡''¨¨*~´´+*~{}^^``[]-.,;:_<>@'. "Se valida que en el campo p_p_nom solo se ingresen letras
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '000'. "Mensaje de error notificando que solo se puede ingresar letras
+  ELSE.
+  ENDIF.
+
+AT SELECTION-SCREEN ON p_s_nom. "Seccion que realiza validaciones sobre el campo p_s_nom
+  IF p_s_nom CA '0123456789°|¬!"#$%&/()=?¡''¨¨*~´´+*~{}^^``[]-.,;:_<>@'. "Se valida que en el campo p_s_nom solo se ingresen letras
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '001'. "Mensaje de error notificando que solo se puede ingresar letras
+  ELSE.
+  ENDIF.
+
+AT SELECTION-SCREEN ON p_p_apel. "Seccion que realiza validaciones sobre el campo p_p_apel
+  IF p_p_apel CA '0123456789°|¬!"#$%&/()=?¡''¨¨*~´´+*~{}^^``[]-.,;:_<>@'. "Se valida que en el campo p_p_apel solo se ingresen letras
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '002'. "Mensaje de error notificando que solo se puede ingresar letras
+  ELSE.
+  ENDIF.
+
+AT SELECTION-SCREEN ON p_f_naci. "Seccion que realiza validaciones sobre el campo p_f_naci
+  IF p_f_naci IS INITIAL. "Se valida que en el p_f_naci se ingrese la fecha de manera correcta
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '003'. "Mensaje de error notificando que se debe ingresar la fecha con el formato correcto
+  ELSE.
+  ENDIF.
+
+AT SELECTION-SCREEN ON p_l_naci. "Seccion que realiza validaciones sobre el campo p_l_naci
+  IF p_l_naci CA '0123456789°|¬!"#$%&/()=?¡''¨¨*~´´+*~{}^^``[]-.,;:_<>@'. "Se valida que en el campo p_l_naci solo se ingresen letras
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '004'. "Mensaje de error notificando que solo se puede ingresar letras
+  ELSE.
+  ENDIF.
+
+AT SELECTION-SCREEN ON p_nr_per. "Seccion que realiza validaciones sobre el campo p_nr_per
+  IF p_nr_per CA '°|¬!"#$%&/()=?¡''¨¨*~´´+*~{}^^``[]-.,;:_<>@'. "Se valida que en el campo p_nr_per solo se ingresen numeros
+    MESSAGE ID 'ZP1004306' TYPE 'E' NUMBER '005'. "Mensaje de error notificando que solo se puede ingresar numeros
+  ELSE.
+  ENDIF.
+
+START-OF-SELECTION. "Cuando las validaciones son correctas se ejecuta el siguiente codigo
+
+PERFORM logi_inter USING gwa_z. "Esta subrutina se encarga de manejar todos los CRUD del sistema
