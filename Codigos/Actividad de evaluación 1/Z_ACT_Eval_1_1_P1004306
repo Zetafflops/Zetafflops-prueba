@@ -1,0 +1,33 @@
+REPORT Z_ACT_EVAL_1_1_P1004306.
+
+TYPES: slis. "Cargamos los datos tipo slis
+DATA gt_z TYPE TABLE OF ZEVAL_P1004306. "Se crea la tabla interna gt_z que contiene la estructura de la tabla ZEVAL_P1004306
+DATA: g_it_fieldcat TYPE slis_t_fieldcat_alv, "Se declara la variable g_it_fieldcat que contiene la estructura del reporte
+      g_st_fieldcat TYPE slis_fieldcat_alv. "Se declara la variable g_st_fieldcat que contiene las caracteristicas del reporte
+
+SELECT * FROM ZEVAL_P1004306 INTO TABLE gt_z. "Sentencia que trae todos los datos de la tabla ZEVAL_P1004306
+
+IF sy-subrc EQ 0. "Sentencia que valida si hay datos
+
+  g_st_fieldcat-fieldname = 'NRO_DE_PERSONAL'. "Se agrega el numero del personal al reporte
+  g_st_fieldcat-seltext_m = 'Numero de personal'. "Titulo de la columna cuando el reporte esta maximizado
+  g_st_fieldcat-seltext_s = 'N° personal'. "Titulo de la columna cuando el reporte esta minimizado
+  APPEND g_st_fieldcat TO g_it_fieldcat. "Se agrega los atributos mencionados a la tabla interna del reporte
+
+  g_st_fieldcat-fieldname = 'PRIMER_NOMBRE'. "Se agrega el primer nombre al reporte
+  g_st_fieldcat-seltext_m = 'Nombre'. "Titulo de la columna cuando el reporte esta maximizado
+  g_st_fieldcat-seltext_s = 'Nom'. "Titulo de la columna cuando el reporte esta minimizado
+  APPEND g_st_fieldcat TO g_it_fieldcat. "Se agrega los atributos mencionados a la tabla interna del reporte
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY' "Se llama al modulo de funcion que crea el reporte
+  EXPORTING
+      it_fieldcat   = g_it_fieldcat[] "Tabla que contiene las caracteristicas y atributos agregados al reporte
+    TABLES
+      t_outtab      = gt_z[] "Tabla interna que contiene los datos consultados
+    EXCEPTIONS
+      program_error = 1 "Posible error
+      OTHERS        = 2. "Otros posibles errores
+
+ELSE.
+  MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '006'.
+ENDIF.
