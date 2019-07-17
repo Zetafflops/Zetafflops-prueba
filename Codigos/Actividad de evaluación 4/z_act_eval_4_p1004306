@@ -1,0 +1,116 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_ACT_EVAL_4_P1004306
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT z_act_eval_4_p1004306.
+
+CLASS c_ope_basicas DEFINITION. "Se define la clase c_ope_basicas
+
+  PUBLIC SECTION. "Se definie la seccion como publica
+
+    METHODS: m_add IMPORTING num1 TYPE decfloat34 num2 TYPE decfloat34, "Se declara el metodo m_add que suma los dos parametros (num1 y num2)
+             m_subtraction IMPORTING num1 TYPE decfloat34 num2 TYPE decfloat34, "Se declara el metodo m_subtraction que resta los dos parametros (num1 y num2)
+             m_multiplication IMPORTING num1 TYPE decfloat34 num2 TYPE decfloat34, "Se declara el metodo m_multiplication que multiplica los dos parametros (num1 y num2)
+             m_division IMPORTING num1 TYPE decfloat34 num2 TYPE decfloat34. "Se declara el metodo m_division que divide los dos parametros (num1 y num2)
+
+
+ENDCLASS. "Finaliza la definicion de la clase c_ope_basicas
+
+CLASS c_ope_basicas IMPLEMENTATION. "Se implementa la clase c_ope_basicas
+
+  METHOD m_add. "Se implementa la logica del metodo m_add
+
+    DATA resul TYPE decfloat34. "Se declara la variable resul que contiene el resultado de la operacion
+    resul = num1 + num2. "Se realiza la suma entre num1 y num2
+    WRITE: / 'El resultado de la suma es: ',resul. "Se imprime el resultado de la operacion
+
+  ENDMETHOD.
+
+  METHOD m_subtraction. "Se implementa la logica del metodo m_subtraction
+
+    DATA resul TYPE decfloat34. "Se declara la variable resul que contiene el resultado de la operacion
+    resul = num1 - num2. "Se realiza la resta entre num1 y num2
+    WRITE: / 'El resultado de la resta es: ',resul. "Se imprime el resultado de la operacion
+
+  ENDMETHOD.
+
+  METHOD m_multiplication. "Se implementa la logica del metodo m_multiplication
+
+    DATA resul TYPE decfloat34. "Se declara la variable resul que contiene el resultado de la operacion
+    resul = num1 * num2. "Se realiza la multiplicacion entre num1 y num2
+    WRITE: / 'El resultado de la multiplicacion es: ',resul. "Se imprime el resultado de la operacion
+
+  ENDMETHOD.
+
+  METHOD m_division. "Se implementa la logica del metodo m_division
+
+    TRY . "Se inicializa el try catch.
+
+      DATA resul TYPE decfloat34. "Se declara la variable resul que contiene el resultado de la operacion
+      resul = num1 / num2. "Se realiza la division entre num1 y num2
+      WRITE: / 'El resultado de la division es: ',resul. "Se imprime el resultado de la operacion
+
+    CATCH cx_sy_zerodivide. "Se activa el try catch cuando hay division por 0
+
+    MESSAGE ID 'ZP1004306' TYPE 'I' NUMBER '011'. "Se activa un mensaje de informacion que notifica que no se puede dividir por 0
+
+    ENDTRY."Se finaliza el try catch
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+START-OF-SELECTION. "Se inicializa el codigo despues de activar y definir la clase c_ope_basicas_
+
+  SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+
+  SELECTION-SCREEN BEGIN OF BLOCK ope_bas WITH FRAME TITLE text-b01. "Se abre el bloque ope_bas el cual contiene las opciones de sumar, restar, multiplicar y dividir.
+
+  PARAMETERS: p_add RADIOBUTTON GROUP ope, "Opcion para sumar
+              p_sub RADIOBUTTON GROUP ope, "Opcion para restar
+              p_multi RADIOBUTTON GROUP ope, "Opcion para multiplicar
+              p_divi RADIOBUTTON GROUP ope.  "Opcion para dividir
+
+  SELECTION-SCREEN END OF BLOCK ope_bas. "Se finaliza el bloque ope_bas
+
+  SELECTION-SCREEN SKIP. "Pinta y genera un salto de linea
+
+  SELECTION-SCREEN BEGIN OF BLOCK number WITH FRAME TITLE text-b02. "Se abre el bloque number el cual contiene los campos para ingresar el numero 1 y el numero dos
+
+  PARAMETERS: gv_num1 TYPE decfloat34 OBLIGATORY, "Numero 1
+              gv_num2 TYPE decfloat34 OBLIGATORY. "Numero 2
+
+  SELECTION-SCREEN END OF BLOCK number. "Se finaliza el bloque number
+
+  DATA: gr_object TYPE REF TO object, "Se declara la varibale gr_object de tipo object para contener la clase c_ope_basicas
+        gv_method_name TYPE string. "Se declara la varibale gv_method_name la cual va a contener el nombre del metodo que vamos a llamar
+
+  CREATE OBJECT gr_object TYPE c_ope_basicas. "Se crea el objeto de tipo c_ope_basicas el cual tiene la clase c_ope_basicas
+
+  CASE abap_true. "Se declara el case para saber que opcion se selecciono
+    WHEN p_add. "Opcion para sumar
+
+      gv_method_name = 'M_ADD'. "Se le pasa el nombre del metodo a la variable gv_method_name
+      CALL METHOD gr_object->(gv_method_name) EXPORTING num1 = gv_num1 num2 = gv_num2. "Se llama al metodo m_add y se le pasa por parametro el numero 1 y numero 2
+
+    WHEN p_sub. "Opcion para restar
+
+      gv_method_name = 'M_SUBTRACTION'. "Se le pasa el nombre del metodo a la variable gv_method_name
+      CALL METHOD gr_object->(gv_method_name) EXPORTING num1 = gv_num1 num2 = gv_num2. "Se llama al metodo m_subtraction y se le pasa por parametro el numero 1 y numero 2
+
+    WHEN p_multi. "Opcion para multiplicar
+
+      gv_method_name = 'M_MULTIPLICATION'. "Se le pasa el nombre del metodo a la variable gv_method_name
+      CALL METHOD gr_object->(gv_method_name) EXPORTING num1 = gv_num1 num2 = gv_num2. "Se llama al metodo m_multiplication y se le pasa por parametro el numero 1 y numero 2
+
+    WHEN p_divi. "Opcion para dividir
+
+      gv_method_name = 'M_DIVISION'. "Se le pasa el nombre del metodo a la variable gv_method_name
+      CALL METHOD gr_object->(gv_method_name) EXPORTING num1 = gv_num1 num2 = gv_num2. "Se llama al metodo m_division y se le pasa por parametro el numero 1 y numero 2
+
+    WHEN OTHERS.
+  ENDCASE.
