@@ -1,1 +1,5 @@
+*&---------------------------------------------------------------------*
+*&  Include           Z_PANTALLAS_P1004306_DEF_VAR
+*&---------------------------------------------------------------------*
 
+DATA: gwa_z TYPE zeval_p1004306."Se declara la variable gwa_z que contiene la tabla zeval_p1004306
